@@ -1,10 +1,8 @@
 package ies.jandula.reservaCarritos.models;
 
+import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,18 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Recursos  {
-	@EmbeddedId
-	private RecursosId recursoId;
+public class RecursosId implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2099506005992566764L;
 	
-	@Id
-	@Column
 	private String aula;
-	
-	@Column
 	private int carritos;
 	
-	@Column 
-	private int nAlumnos;
 	
+
 }
