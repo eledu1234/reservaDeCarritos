@@ -3,21 +3,21 @@ spring:
   jpa.hibernate.ddl-auto: update
   spring.jpa.hibernate.ddl-auto: validate
   datasource:
-   driverClassName: com.mysql.cj.jdbc.Driver
-   url: jdbc:mysql://localhost:3306/reservaCarritos?createDatabaseIfNotExist=true
-   username: root
-   password: toor
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/reservaCarritos?createDatabaseIfNotExist=true
+    username: root
+    password: 123456Aa-
 
-   hikari:
+  hikari:
     connection-timeout: 60000
     maximum-pool-size: 5
 server:
-    port: 8081
+  port: 8085
 logging:
-    level:
-         root: INFO
-    file:
-         name: C:\logs\Issues.log
-         max-size: 1MB
-         max-history: 10
-         total-size-cap: 10MB
+  level:
+    root: INFO
+  file:
+    name: C:\logs\Issues.log
+    max-size: 1MB
+    max-history: 10
+    total-size-cap: 10MB

@@ -2,15 +2,13 @@ package ies.jandula.reservaCarritos.models;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Entity
+@Embeddable
 public class RecursosId implements Serializable{
 
 	/**
@@ -19,8 +17,9 @@ public class RecursosId implements Serializable{
 	private static final long serialVersionUID = 2099506005992566764L;
 	
 	private String aula;
+	
 	private int carritos;
-	
-	
+
+
 
 }

@@ -3,24 +3,22 @@ package ies.jandula.reservaCarritos.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Profesor {
 	
 	@Id
-	@Column
+	@Column(length = 9)
 	private String nif;
 	
-	@Column 
+	@Column(length = 100, nullable = false)
 	private String nombre;
 	
-	@Column
+	@Column(length = 50, nullable = false)
 	private String email;
 
 }
