@@ -1,10 +1,8 @@
 package ies.jandula.reservaCarritos.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,17 +12,10 @@ import lombok.NoArgsConstructor;
 public class Reserva {
 
 	@EmbeddedId
+	@Column(length = 50)
 	private ReservaId reservaId;
 	
-	@ManyToOne
-	@JoinColumn(name = "nif_profesor")
-	@MapsId("nif")
-	private Profesor nifProfesor;
+	@Column(nullable = false)
+	private int nAlumnos;
 	
-	
-	@ManyToOne
-	@JoinColumn(name = "dia_de_la_semana")
-	@MapsId("diasDeLaSemana")
-	private DiasSemana diasDeLaSemana;
-	
-	}
+}

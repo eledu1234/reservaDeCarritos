@@ -12,13 +12,10 @@ import lombok.NoArgsConstructor;
 public class Profesor {
 	
 	@Id
-	@Column(length = 9)
-	private String nif;
+	@Column(length = 50, nullable = false)
+	private String email;
 	
 	@Column(length = 100, nullable = false)
 	private String nombre;
 	
-	@Column(length = 50, nullable = false)
-	private String email;
-
 }

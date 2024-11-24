@@ -1,8 +1,8 @@
 package ies.jandula.reservaCarritos.models;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Recursos {
 	
-	@EmbeddedId
-	private RecursosId recursoId;
+	@Id
+	@Column(length = 25)
+	private String aulaYCarritos;
 	
-	@Column(nullable = false)
-	private int nAlumnos;
-
+	@Column(length = 25, nullable = false)
+	private String tipoRecurso;
+	
 }
