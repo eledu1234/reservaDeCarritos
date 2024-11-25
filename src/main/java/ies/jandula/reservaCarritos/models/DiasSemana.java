@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class DiasSemana {
+public class DiasSemana
+{
 
 	@Id
 	@Column(length = 9)

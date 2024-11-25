@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class Profesor {
+public class Profesor
+{
 	
 	@Id
 	@Column(length = 50, nullable = false)

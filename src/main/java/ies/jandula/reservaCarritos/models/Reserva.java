@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class Reserva {
+public class Reserva 
+{
 
 	@EmbeddedId
 	@Column(length = 50)

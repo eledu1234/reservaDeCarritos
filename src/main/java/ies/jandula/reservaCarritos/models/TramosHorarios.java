@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class TramosHorarios {
-	
-	
+public class TramosHorarios 
+{
 	//11:00/12:00
 	 @Id
 	 @Column(length = 20)

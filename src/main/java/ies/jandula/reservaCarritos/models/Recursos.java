@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class Recursos {
+public class Recursos 
+{
 	
 	@Id
 	@Column(length = 25)
