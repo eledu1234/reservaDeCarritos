@@ -1,11 +1,6 @@
 package ies.jandula.reservaCarritos.rest;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +19,6 @@ import ies.jandula.reservaCarritos.models.TramosHorarios;
 import ies.jandula.reservaCarritos.repository.DiasSemanaRepository;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 import ies.jandula.reservaCarritos.repository.ReservaRepository;
-import ies.jandula.reservaCarritos.utils.Costantes;
 import ies.jandula.reservaCarritos.utils.Methods;
 import lombok.extern.log4j.Log4j2;
 
