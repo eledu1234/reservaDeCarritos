@@ -1,6 +1,7 @@
 package ies.jandula.reservaCarritos.rest;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ies.jandula.reservaCarritos.exception.ReservaException;
 import ies.jandula.reservaCarritos.models.DiasSemana;
-import ies.jandula.reservaCarritos.models.Profesor;
 import ies.jandula.reservaCarritos.models.Recursos;
 import ies.jandula.reservaCarritos.models.Reserva;
 import ies.jandula.reservaCarritos.models.ReservaId;
@@ -66,43 +66,41 @@ public class ReservaCarritosRestWeb
 		}		
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/cancelar_recurso", consumes = {"application/json"})
+	@RequestMapping(method = RequestMethod.DELETE, value = "/cancelar_recurso")
 	public ResponseEntity<?> cancelarRecurso(@RequestHeader(value = "email") String email,
 											 @RequestHeader(value = "recurso") String aulaYCarritos,
 											 @RequestHeader(value = "diaDeLaSemana") String diaDeLaSemana,
 											 @RequestHeader(value = "tramoHorario") String tramoHorario){
 		try {
 			
-			Reserva reservaABorrar = new Reserva();
+			Recursos recurso = new Recursos();
+			recurso.setAulaYCarritos(aulaYCarritos);
+			
+			
+			DiasSemana diasSemana = new DiasSemana();
+			diasSemana.setDiasDeLaSemana(diaDeLaSemana);
+			
+			
+			TramosHorarios tramosHorarios = new TramosHorarios();
+			tramosHorarios.setTramosHorarios(tramoHorario);
+
+			
 			ReservaId reservaId = new ReservaId();
+			reservaId.setEmail(email);
+			reservaId.setAulaYCarritos(recurso);
+			reservaId.setDiasDeLaSemana(diasSemana);
+			reservaId.setTramosHorarios(tramosHorarios);
 			
-			
-			if(reservaRepository.existsByProfesorEmail(email))
-			{
-				Profesor profesor = new Profesor();
-				profesor.setEmail(email);
-				reservaId.setEmail(profesor);
-			}
-			if(reservaRepository.existsByAulaYCarritos(aulaYCarritos)) 
-			{
-				Recursos recursoABorrar = new Recursos();
-				recursoABorrar.setAulaYCarritos(aulaYCarritos);
-				reservaId.setAulaYCarritos(recursoABorrar);
-			}
-			if(reservaRepository.existsByDiaDeLaSemana(diaDeLaSemana)) 
-			{
-				DiasSemana diasSemana = new DiasSemana();
-				diasSemana.setDiasDeLaSemana(diaDeLaSemana);
-				reservaId.setDiasDeLaSemana(diasSemana);
-			}
-			if(reservaRepository.existsByTramosHorarios(tramoHorario)) 
-			{
-				TramosHorarios tramosHorarios = new TramosHorarios();
-				tramosHorarios.setTramos(tramoHorario);
-				reservaId.setTramosHorarios(tramosHorarios);
-			}
-			
+			Reserva reservaABorrar = new Reserva();
 			reservaABorrar.setReservaId(reservaId);
+			
+			// Verifica si existe la reserva 
+			Optional<Reserva> optinalReserva = this.reservaRepository.encontrarReserva(email, aulaYCarritos, diaDeLaSemana, tramoHorario);
+			if (!optinalReserva.isPresent()) {
+	            return ResponseEntity.status(404).body("La reserva no existe");
+	        }
+			
+			// Si la reserva existe la borra
 			reservaRepository.delete(reservaABorrar);		
 			
 			return ResponseEntity.ok("Reserva borrada correctamente");
@@ -158,7 +156,7 @@ public class ReservaCarritosRestWeb
 	/*
 	 * end point de tipo get para mostar una lista con los tramos horarios
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/obtener_recurso")
+	@RequestMapping(method = RequestMethod.GET, value = "/obtener_tramos_horarios")
 	public ResponseEntity<?> obtenerTramosHorarios() throws Exception
 	{
 		
@@ -166,7 +164,7 @@ public class ReservaCarritosRestWeb
 		{
 			List<TramosHorarios> listaTramos;
 			
-			listaTramos = tramoHorarioRepository.findAll();
+			listaTramos = this.tramoHorarioRepository.findAll();
 			
 			return ResponseEntity.ok(listaTramos);
 		}
@@ -186,101 +184,47 @@ public class ReservaCarritosRestWeb
 	 * de alumnos
 	 */
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/reservarRecurso", consumes = {"application/json"})
+	@RequestMapping(method = RequestMethod.POST, value = "/reservarRecurso")
 	public ResponseEntity<?> reservarRecurso(@RequestHeader(value = "email") String email,
 											 @RequestHeader(value = "profesor") String nombreProfesor,
 											 @RequestHeader(value = "recurso") String aulaYCarritos,
 											 @RequestHeader(value = "diaDeLaSemana") String diaDeLaSemana,
-											 @RequestHeader(value = "tramoHorario") String tramoHorario,
+											 @RequestHeader(value = "tramosHorarios") String tramosHorarios,
 											 @RequestHeader(value = "nAlumnos") int nAlumnos) throws Exception
 	{
 		try {
 			
-			Reserva reserva = new Reserva();
+			Recursos recurso = new Recursos();
+			recurso.setAulaYCarritos(aulaYCarritos);
+			
+			
+			DiasSemana diasSemana = new DiasSemana();
+			diasSemana.setDiasDeLaSemana(diaDeLaSemana);
+			
+			
+			TramosHorarios tramos = new TramosHorarios();
+			tramos.setTramosHorarios(tramosHorarios);
+
+			
 			ReservaId reservaId = new ReservaId();
+			reservaId.setEmail(email);
+			reservaId.setAulaYCarritos(recurso);
+			reservaId.setDiasDeLaSemana(diasSemana);
+			reservaId.setTramosHorarios(tramos);
 			
+			Reserva reserva = new Reserva();
+			reserva.setReservaId(reservaId);
+			reserva.setNombreProfesor(nombreProfesor);
+			reserva.setNAlumnos(nAlumnos);
 			
-			if(!reservaRepository.existsByProfesorEmail(email))
-			{
-				Profesor profesor = new Profesor();
-				profesor.setEmail(email);
-				reservaId.setEmail(profesor);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(10,"error al regitrar el email");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(410).body(reservaException.getBodyMesagge());
-			}
-			
-			if(!reservaRepository.existsByProfesorNombre(nombreProfesor))
-			{
-				Profesor profesor = new Profesor();
-				profesor.setEmail(nombreProfesor);
-				reservaId.setEmail(profesor);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(11,"error al regitrar el nombre");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(411).body(reservaException.getBodyMesagge());
-			}
-			
-			if(!reservaRepository.existsByAulaYCarritos(aulaYCarritos)) 
-			{
-				Recursos recurso = new Recursos();
-				recurso.setAulaYCarritos(aulaYCarritos);
-				reservaId.setAulaYCarritos(recurso);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(12,"error al regitrar los recursos");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(412).body(reservaException.getBodyMesagge());
-			}
-			
-			if(!reservaRepository.existsByDiaDeLaSemana(diaDeLaSemana)) 
-			{
-				DiasSemana diaSemana = new DiasSemana();
-				diaSemana.setDiasDeLaSemana(diaDeLaSemana);
-				reservaId.setDiasDeLaSemana(diaSemana);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(13,"error al regitrar el dia de la semana");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(413).body(reservaException.getBodyMesagge());
-			}
-			
-			if(!reservaRepository.existsByTramosHorarios(tramoHorario)) 
-			{
-				TramosHorarios tramoHorarioo = new TramosHorarios();
-				tramoHorarioo.setTramos(tramoHorario);
-				reservaId.setTramosHorarios(tramoHorarioo);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(14,"error al regitrar el tramoHorario");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(414).body(reservaException.getBodyMesagge());
-			}
-			
-			
-			if(!reservaRepository.existsByReservaNumeroAlumnos(nAlumnos)) 
-			{
-				Reserva reservaAlumnos = new Reserva();
-				reservaAlumnos.setTramos(nAlumnos);
-				reservaId.setTramosHorarios(reservaAlumnos);
-			}else
-			{
-				ReservaException reservaException = new ReservaException(15,"error al regitrar el numero de alumnos");
-				log.error("error al hacer la reserva", reservaException);
-				
-				return ResponseEntity.status(415).body(reservaException.getBodyMesagge());
-			}
+			// Verifica si existe la reserva 
+			Optional<Reserva> optinalReserva = this.reservaRepository.encontrarReserva(email, aulaYCarritos, diaDeLaSemana, tramosHorarios);
+			if (optinalReserva.isPresent()) {
+	            return ResponseEntity.status(404).body("La reserva ya existe");
+	        }
 			
 			reserva.setReservaId(reservaId);
-			reservaRepository.save(reserva);		
+			this.reservaRepository.saveAndFlush(reserva);		
 			
 			return ResponseEntity.ok(reserva);
 			

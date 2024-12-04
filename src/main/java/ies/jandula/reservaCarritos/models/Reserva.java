@@ -13,10 +13,12 @@ public class Reserva
 {
 
 	@EmbeddedId
-	@Column(length = 50)
 	private ReservaId reservaId;
 	
 	@Column(nullable = false)
 	private int nAlumnos;
+	
+	@Column(length = 100, nullable = false)
+	private String nombreProfesor;
 	
 }

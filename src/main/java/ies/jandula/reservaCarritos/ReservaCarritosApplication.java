@@ -19,7 +19,9 @@ public class ReservaCarritosApplication implements CommandLineRunner
 	private IGestroParseo iGestroParseo;
 	@Autowired
 	private RecursosRepository recursosRepository;
-	@Autowired TramoHorarioRepository tramoHorarioRepository;
+	
+	@Autowired 
+	private TramoHorarioRepository tramoHorarioRepository;
 
 	public static void main(String[] args) 
 	{

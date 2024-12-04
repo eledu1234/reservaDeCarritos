@@ -17,9 +17,7 @@ public class ReservaId implements Serializable
 {
 	private static final long serialVersionUID = 4705657948307458266L;
 	
-	@ManyToOne
-	@JoinColumn(name = "email_profesor", referencedColumnName = "email")
-	private Profesor email;
+	private String email;
 	
 	@ManyToOne
 	@JoinColumn(name = "recursos_aula_y_carritos", referencedColumnName = "aulaYCarritos")
@@ -30,13 +28,7 @@ public class ReservaId implements Serializable
 	private DiasSemana diasDeLaSemana;
 
 	@ManyToOne
-	@JoinColumn(name = "tramos_horarios", referencedColumnName = "tramos")
+	@JoinColumn(name = "tramos_horarios", referencedColumnName = "tramosHorarios")
 	private TramosHorarios tramosHorarios;
-	
-	@ManyToOne
-	@JoinColumn(name = "nombre_profesor", referencedColumnName = "nombre")
-	private Profesor nombre;
-	
-	
 
 }

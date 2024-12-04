@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ies.jandula.reservaCarritos.exception.ReservaException;
-import ies.jandula.reservaCarritos.interfaces.IParseoRecurso;
+import ies.jandula.reservaCarritos.interfaces.IParseoTramoHorario;
 import ies.jandula.reservaCarritos.models.TramosHorarios;
 import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
 
 @Service
-public class ParseoTramoHorario implements IParseoRecurso
+public class ParseoTramoHorario implements IParseoTramoHorario
 {
 	
 	@Autowired
@@ -32,7 +32,7 @@ public class ParseoTramoHorario implements IParseoRecurso
 			
 			TramosHorarios tramos = new TramosHorarios();
 			
-			tramos.setTramos(valores[0]);
+			tramos.setTramosHorarios(valores[0]);
 			
 			this.tramoHorarioRepository.saveAndFlush(tramos);
 		}
