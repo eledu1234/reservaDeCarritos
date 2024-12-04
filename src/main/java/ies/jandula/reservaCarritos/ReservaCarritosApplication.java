@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ies.jandula.reservaCarritos.interfaces.IGestroParseo;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
+import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
 import ies.jandula.reservaCarritos.utils.Costantes;
 
 @SpringBootApplication
@@ -18,6 +19,7 @@ public class ReservaCarritosApplication implements CommandLineRunner
 	private IGestroParseo iGestroParseo;
 	@Autowired
 	private RecursosRepository recursosRepository;
+	@Autowired TramoHorarioRepository tramoHorarioRepository;
 
 	public static void main(String[] args) 
 	{
@@ -32,6 +34,11 @@ public class ReservaCarritosApplication implements CommandLineRunner
 		if(this.recursosRepository.findAll().isEmpty())
 		{
 			this.iGestroParseo.parseaFichero(Costantes.FICHERO_RECURSO);
+		}
+		
+		if(this.tramoHorarioRepository.findAll().isEmpty())
+		{
+			this.iGestroParseo.parseaFichero(Costantes.FICHERO_TRAMOS_HORARIOS);
 		}
 	}
 

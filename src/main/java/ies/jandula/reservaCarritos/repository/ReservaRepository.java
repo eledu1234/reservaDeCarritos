@@ -12,6 +12,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, ReservaId>
 
 	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.reservaId.email = :email")
     boolean existsByProfesorEmail(@Param("email") String email);
+	
+	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.reservaId.nombre = :nombre")
+    boolean existsByProfesorNombre(@Param("nombre") String nombre);
 
 	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.reservaId.aulaYCarritos = :aulaYCarritos")
 	boolean existsByAulaYCarritos(@Param("aulaYCarritos") String aulaYCarritos);
@@ -21,5 +24,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, ReservaId>
 	
 	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.reservaId.tramosHorarios = :tramosHorarios")
 	boolean existsByTramosHorarios(@Param("tramosHorarios") String tramosHorarios);
+	
+	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.reservaId.nAlumnos = :nAlumnos")
+	boolean existsByReservaNumeroAlumnos(@Param("nAlumnos") int nAlumnos);
 
 }

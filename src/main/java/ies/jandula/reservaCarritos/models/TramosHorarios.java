@@ -15,5 +15,12 @@ public class TramosHorarios
 	 @Id
 	 @Column(length = 20)
 	 private String tramos;
+
+	public void setTramos(String tramos) {
+		// TODO Auto-generated method stub
+		
+	}
+	 
+	 
 	 
 }

@@ -32,5 +32,11 @@ public class ReservaId implements Serializable
 	@ManyToOne
 	@JoinColumn(name = "tramos_horarios", referencedColumnName = "tramos")
 	private TramosHorarios tramosHorarios;
+	
+	@ManyToOne
+	@JoinColumn(name = "nombre_profesor", referencedColumnName = "nombre")
+	private Profesor nombre;
+	
+	
 
 }
