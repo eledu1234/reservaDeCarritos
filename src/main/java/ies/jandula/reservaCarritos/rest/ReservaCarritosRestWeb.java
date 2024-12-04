@@ -207,7 +207,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setEmail(profesor);
 			}else
 			{
-				log.error("email de profesor ya exite");
+				ReservaException reservaException = new ReservaException(10,"error al regitrar el email");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(410).body(reservaException.getBodyMesagge());
 			}
 			
 			if(!reservaRepository.existsByProfesorNombre(nombreProfesor))
@@ -217,7 +220,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setEmail(profesor);
 			}else
 			{
-				log.error("nombre del profesor ya exite");
+				ReservaException reservaException = new ReservaException(11,"error al regitrar el nombre");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(411).body(reservaException.getBodyMesagge());
 			}
 			
 			if(!reservaRepository.existsByAulaYCarritos(aulaYCarritos)) 
@@ -227,7 +233,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setAulaYCarritos(recurso);
 			}else
 			{
-				log.error("el recurso ya exite");
+				ReservaException reservaException = new ReservaException(12,"error al regitrar los recursos");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(412).body(reservaException.getBodyMesagge());
 			}
 			
 			if(!reservaRepository.existsByDiaDeLaSemana(diaDeLaSemana)) 
@@ -237,7 +246,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setDiasDeLaSemana(diaSemana);
 			}else
 			{
-				log.error("el dia de la semana ya exite");
+				ReservaException reservaException = new ReservaException(13,"error al regitrar el dia de la semana");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(413).body(reservaException.getBodyMesagge());
 			}
 			
 			if(!reservaRepository.existsByTramosHorarios(tramoHorario)) 
@@ -247,7 +259,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setTramosHorarios(tramoHorarioo);
 			}else
 			{
-				log.error("el tramo horario ya exite");
+				ReservaException reservaException = new ReservaException(14,"error al regitrar el tramoHorario");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(414).body(reservaException.getBodyMesagge());
 			}
 			
 			
@@ -258,7 +273,10 @@ public class ReservaCarritosRestWeb
 				reservaId.setTramosHorarios(reservaAlumnos);
 			}else
 			{
-				log.error("el numero de alumnos esta registrado");
+				ReservaException reservaException = new ReservaException(15,"error al regitrar el numero de alumnos");
+				log.error("error al hacer la reserva", reservaException);
+				
+				return ResponseEntity.status(415).body(reservaException.getBodyMesagge());
 			}
 			
 			reserva.setReservaId(reservaId);
