@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
 import ies.jandula.reservaCarritos.interfaces.IGestroParseo;
+import ies.jandula.reservaCarritos.repository.DiasSemanaRepository;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
 import ies.jandula.reservaCarritos.utils.Costantes;
@@ -19,11 +20,15 @@ public class ReservaCarritosApplication implements CommandLineRunner
 	
 	@Autowired
 	private IGestroParseo iGestroParseo;
+	
 	@Autowired
 	private RecursosRepository recursosRepository;
 	
 	@Autowired 
 	private TramoHorarioRepository tramoHorarioRepository;
+	
+	@Autowired
+	private DiasSemanaRepository diasSemanaRepository;
 
 	public static void main(String[] args) 
 	{
@@ -46,6 +51,12 @@ public class ReservaCarritosApplication implements CommandLineRunner
 			
 			log.info("No hay datos, cogemos datos del fichero csv");
 			this.iGestroParseo.parseaFichero(Costantes.FICHERO_TRAMOS_HORARIOS);
+		}
+		
+		if(this.diasSemanaRepository.findAll().isEmpty())
+		{			
+			log.info("No hay datos, cogemos datos del fichero csv");
+			this.iGestroParseo.parseaFichero(Costantes.FICHERO_DIAS_SEMANAS);
 		}
 	}
 

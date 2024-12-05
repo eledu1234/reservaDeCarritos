@@ -125,30 +125,16 @@ public class ReservaCarritosRestWeb
 	@RequestMapping(method = RequestMethod.GET, value = "/obtener_DiasSemanas")
 	public ResponseEntity<?> obtenerDiasSemana()
 	{
-        try 
-        {
-        	Methods method = new Methods();
-        	
-            List<DiasSemana> listaDias = diasSemanaRepository.findAll();
-
-            if (listaDias.isEmpty()) 
-            {
-                listaDias = method.cargarDatosCSV();
-                
-                if (!listaDias.isEmpty())
-                {
-                    diasSemanaRepository.saveAll(listaDias);
-                    log.info("Datos de los días de la semana cargados desde el CSV.");
-                } 
-                else 
-                {
-                    return ResponseEntity.status(404).body("No se pudo cargar ningún dato desde el archivo CSV.");
-                }
-            }
-            
-            return ResponseEntity.ok(listaDias);
-
-        } 
+		try
+		{
+			// Creacion de una lista para almacenar los recursos
+			List<DiasSemana> listaDias;
+			
+			// Encontramos todos los recursos y los introducimos en la lista
+			listaDias = diasSemanaRepository.findAll();
+			
+			return ResponseEntity.ok(listaDias);
+		}
         catch (Exception exception) 
         {
             ReservaException reservaException = new ReservaException(3, "Error al obtener los días de la semana", exception);

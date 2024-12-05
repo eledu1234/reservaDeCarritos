@@ -11,18 +11,21 @@ import ies.jandula.reservaCarritos.models.Recursos;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 
 @Service
-public class ParseoRecurso implements IParseoRecurso{
+public class ParseoRecurso implements IParseoRecurso
+{
 	
 	@Autowired
 	private RecursosRepository recursosRepository;
 
 	@Override
-	public void parseaFichero(Scanner scanner) throws ReservaException {
+	public void parseaFichero(Scanner scanner) throws ReservaException
+	{
 		// TODO Auto-generated method stub
 		
 		scanner.nextLine();
 		
-		while(scanner.hasNextLine()){
+		while(scanner.hasNextLine())
+		{
 			
 			String lineaDelFichero = scanner.nextLine();
 			
