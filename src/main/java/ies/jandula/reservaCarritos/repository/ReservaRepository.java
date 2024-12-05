@@ -1,11 +1,13 @@
 package ies.jandula.reservaCarritos.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import ies.jandula.reservaCarritos.models.Recursos;
 import ies.jandula.reservaCarritos.models.Reserva;
 import ies.jandula.reservaCarritos.models.ReservaId;
 
@@ -20,5 +22,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, ReservaId>
     						 @Param("aulaYCarritos") String aulaYCarritos,
     						 @Param("diasDeLaSemana") String diasDeLaSemana,
     						 @Param("tramosHorarios") String tramosHorarios);
+
+	List<ReservaId> findByRecursos(Recursos recursos);
 
 }

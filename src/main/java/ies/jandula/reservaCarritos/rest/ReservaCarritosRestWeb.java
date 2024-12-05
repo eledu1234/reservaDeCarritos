@@ -1,12 +1,14 @@
 package ies.jandula.reservaCarritos.rest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.naming.ldap.Rdn;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +24,6 @@ import ies.jandula.reservaCarritos.repository.DiasSemanaRepository;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 import ies.jandula.reservaCarritos.repository.ReservaRepository;
 import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
-import ies.jandula.reservaCarritos.utils.Methods;
 import lombok.extern.log4j.Log4j2;
 
 @RequestMapping(value = "/incidenciasTic", produces = { "application/json" })
@@ -169,6 +170,63 @@ public class ReservaCarritosRestWeb
 			return ResponseEntity.status(403).body(reservaException.getBodyMesagge());
 		}
 	}
+	
+	/**
+	 * Recibe un recurso y devuelve una lista de recursos organizados por días y tramos horarios, para mostrarlos 
+	 * @param recursos
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/reservarListaRecursos", consumes = "application/json")
+	public ResponseEntity<?> reservarListaRecursos(@RequestBody Recursos recursos) throws Exception 
+	{
+	    try
+	    {
+	        // Valida el recurso
+	        if (recursos == null || recursos.getAulaYCarritos() == null) 
+	        {
+	            return ResponseEntity.badRequest().body("El recurso proporcionado es inválido");
+	        }
+
+	        // Obtiene las reservas asociadas al recurso
+	        List<ReservaId> reservas = reservaRepository.findByRecursos(recursos);
+
+	        // Organiza las reservas por días y tramos horarios
+	        Map<String, Map<String, List<String>>> tabla = new TreeMap<>();
+
+	        for (ReservaId reserva : reservas)
+	        {
+	            String dia = reserva.getDiasDeLaSemana().getDiasDeLaSemana();
+	            String tramo = reserva.getTramosHorarios().getTramosHorarios();
+	            String email = reserva.getEmail();
+
+	            // Verifica si el día ya existe en la tabla
+	            if (!tabla.containsKey(dia))
+	            {
+	                tabla.put(dia, new TreeMap<>());
+	            }
+
+	            // Verificar si el tramo ya existe en el día
+	            if (!tabla.get(dia).containsKey(tramo))
+	            {
+	                tabla.get(dia).put(tramo, new ArrayList<>());
+	            }
+
+	            // Agregar el email al tramo correspondiente
+	            tabla.get(dia).get(tramo).add(email);
+	        }
+
+	        // Devuelve la tabla directamente
+	        return ResponseEntity.ok(tabla);
+	        
+	    } 
+	    catch (Exception exception)
+	    {
+	        log.error("Error al procesar las reservas", exception);
+	        return ResponseEntity.status(500).body("Error al procesar las reservas");
+	    }
+	}
+
 	
 	/**
 	 * end point de tipo post para realizar una reserva con un correo de un profesor, un
