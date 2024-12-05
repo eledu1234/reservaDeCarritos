@@ -3,6 +3,8 @@ package ies.jandula.reservaCarritos.rest;
 import java.util.List;
 import java.util.Optional;
 
+import javax.naming.ldap.Rdn;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -96,14 +98,18 @@ public class ReservaCarritosRestWeb
 			
 			// Verifica si existe la reserva 
 			Optional<Reserva> optinalReserva = this.reservaRepository.encontrarReserva(email, aulaYCarritos, diaDeLaSemana, tramoHorario);
+			
 			if (!optinalReserva.isPresent()) {
-	            return ResponseEntity.status(404).body("La reserva no existe");
+				String mensajeError="El recurso no existe";
+				log.error(mensajeError);
+				throw new ReservaException(1, mensajeError);
 	        }
+			log.info("Se ha borrado correctamente");
 			
 			// Si la reserva existe la borra
 			reservaRepository.delete(reservaABorrar);		
 			
-			return ResponseEntity.ok("Reserva borrada correctamente");
+			return ResponseEntity.ok().build();
 			
 		}
 		catch (Exception exception) 
@@ -220,8 +226,12 @@ public class ReservaCarritosRestWeb
 			// Verifica si existe la reserva 
 			Optional<Reserva> optinalReserva = this.reservaRepository.encontrarReserva(email, aulaYCarritos, diaDeLaSemana, tramosHorarios);
 			if (optinalReserva.isPresent()) {
-	            return ResponseEntity.status(404).body("La reserva ya existe");
+				String mensajeError="Ya existe la reserva";
+				log.error(mensajeError);
+				throw new ReservaException(1, mensajeError);
 	        }
+			
+			log.info("Se ha reservado correctamente");
 			
 			reserva.setReservaId(reservaId);
 			this.reservaRepository.saveAndFlush(reserva);		
@@ -229,11 +239,8 @@ public class ReservaCarritosRestWeb
 			return ResponseEntity.ok(reserva);
 			
 		}
-		catch (Exception exception) 
+		catch (ReservaException reservaException) 
 		{
-			
-			ReservaException reservaException = new ReservaException(4,"error al hacer la reserva", exception);
-			log.error("error al hacer la reserva", reservaException);
 			
 			return ResponseEntity.status(405).body(reservaException.getBodyMesagge());
 		}		

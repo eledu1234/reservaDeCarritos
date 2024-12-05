@@ -10,8 +10,10 @@ import ies.jandula.reservaCarritos.interfaces.IGestroParseo;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
 import ies.jandula.reservaCarritos.utils.Costantes;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
+@Slf4j
 public class ReservaCarritosApplication implements CommandLineRunner
 {
 	
@@ -35,11 +37,14 @@ public class ReservaCarritosApplication implements CommandLineRunner
 		
 		if(this.recursosRepository.findAll().isEmpty())
 		{
+			log.info("No hay datos, cogemos datos del fichero csv");
 			this.iGestroParseo.parseaFichero(Costantes.FICHERO_RECURSO);
 		}
 		
 		if(this.tramoHorarioRepository.findAll().isEmpty())
 		{
+			
+			log.info("No hay datos, cogemos datos del fichero csv");
 			this.iGestroParseo.parseaFichero(Costantes.FICHERO_TRAMOS_HORARIOS);
 		}
 	}
