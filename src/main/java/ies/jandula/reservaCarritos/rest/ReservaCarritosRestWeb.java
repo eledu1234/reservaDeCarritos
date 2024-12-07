@@ -1,10 +1,7 @@
 package ies.jandula.reservaCarritos.rest;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ies.jandula.reservaCarritos.dto.ReservaDto;
 import ies.jandula.reservaCarritos.exception.ReservaException;
 import ies.jandula.reservaCarritos.models.DiasSemana;
 import ies.jandula.reservaCarritos.models.Recursos;
@@ -24,6 +22,7 @@ import ies.jandula.reservaCarritos.repository.DiasSemanaRepository;
 import ies.jandula.reservaCarritos.repository.RecursosRepository;
 import ies.jandula.reservaCarritos.repository.ReservaRepository;
 import ies.jandula.reservaCarritos.repository.TramoHorarioRepository;
+import ies.jandula.reservaCarritos.service.ReservaService;
 import lombok.extern.log4j.Log4j2;
 
 @RequestMapping(value = "/incidenciasTic", produces = { "application/json" })
@@ -43,6 +42,9 @@ public class ReservaCarritosRestWeb
 	
 	@Autowired
 	private TramoHorarioRepository tramoHorarioRepository;
+	
+	@Autowired
+    private ReservaService reservaService;
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/obtener_recurso")
@@ -177,55 +179,14 @@ public class ReservaCarritosRestWeb
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/reservarListaRecursos", consumes = "application/json")
-	public ResponseEntity<?> reservarListaRecursos(@RequestBody Recursos recursos) throws Exception 
+	@RequestMapping(method = RequestMethod.POST, value = "/reservarListaRecursos", consumes = "application/json")
+    public ResponseEntity<?> reservarListaRecursos(@RequestBody Recursos recursos) throws Exception 
 	{
-	    try
-	    {
-	        // Valida el recurso
-	        if (recursos == null || recursos.getAulaYCarritos() == null) 
-	        {
-	            return ResponseEntity.badRequest().body("El recurso proporcionado es inválido");
-	        }
-
-	        // Obtiene las reservas asociadas al recurso
-	        List<ReservaId> reservas = reservaRepository.findByRecursos(recursos);
-
-	        // Organiza las reservas por días y tramos horarios
-	        Map<String, Map<String, List<String>>> tabla = new TreeMap<>();
-
-	        for (ReservaId reserva : reservas)
-	        {
-	            String dia = reserva.getDiasDeLaSemana().getDiasDeLaSemana();
-	            String tramo = reserva.getTramosHorarios().getTramosHorarios();
-	            String email = reserva.getEmail();
-
-	            // Verifica si el día ya existe en la tabla
-	            if (!tabla.containsKey(dia))
-	            {
-	                tabla.put(dia, new TreeMap<>());
-	            }
-
-	            // Verificar si el tramo ya existe en el día
-	            if (!tabla.get(dia).containsKey(tramo))
-	            {
-	                tabla.get(dia).put(tramo, new ArrayList<>());
-	            }
-
-	            // Agregar el email al tramo correspondiente
-	            tabla.get(dia).get(tramo).add(email);
-	        }
-
-	        // Devuelve la tabla directamente
-	        return ResponseEntity.ok(tabla);
-	        
-	    } 
-	    catch (Exception exception)
-	    {
-	        log.error("Error al procesar las reservas", exception);
-	        return ResponseEntity.status(500).body("Error al procesar las reservas");
-	    }
-	}
+        // Llama al servicio para obtener las reservas filtradas por recurso
+        List<ReservaDto> reservas = reservaService.obtenerReservasPorRecurso(recursos.getAulaYCarritos());
+        
+        return ResponseEntity.ok(reservas);
+    }
 
 	
 	/**
