@@ -13,10 +13,7 @@ public class Recursos
 {
 	
 	@Id
-	@Column(length = 25)
+	@Column(length = 30)
 	private String aulaYCarritos;
-	
-	@Column(length = 25, nullable = false)
-	private String tipoRecurso;
 	
 }

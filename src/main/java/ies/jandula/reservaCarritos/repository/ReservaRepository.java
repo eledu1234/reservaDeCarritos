@@ -15,6 +15,8 @@ import ies.jandula.reservaCarritos.models.ReservaId;
 public interface ReservaRepository extends JpaRepository<Reserva, ReservaId>
 {
 
+//	Consulta que recupera la información sobre las reservas que están asociadas a 
+//	un email, una aulaYCarritos, un diasDeLaSemana y un tramosHorarios
 	@Query("SELECT r FROM Reserva r WHERE r.reservaId.email = :email AND "
 			+ "r.reservaId.aulaYCarritos.aulaYCarritos = :aulaYCarritos AND "
 			+ "r.reservaId.diasDeLaSemana.diasDeLaSemana = :diasDeLaSemana AND "
@@ -23,17 +25,13 @@ public interface ReservaRepository extends JpaRepository<Reserva, ReservaId>
     						 @Param("aulaYCarritos") String aulaYCarritos,
     						 @Param("diasDeLaSemana") String diasDeLaSemana,
     						 @Param("tramosHorarios") String tramosHorarios);
-
-	List<ReservaId> findByRecursos(Recursos recursos);
 	
+
+//	Consulta que recupera la información sobre las reservas que están asociadas a un recurso específico..
 	@Query("SELECT new ies.jandula.reservaCarritos.dto.ReservaDto(" +
-	           "r.reservaId.aulaYCarritos.aulaYCarritos, " +
-	           "r.reservaId.diasDeLaSemana.nombre, " +
-	           "r.reservaId.tramosHorarios.nombre, " +
-	           "r.nAlumnos, " +
-	           "r.nombreProfesor) " +
-	           "FROM Reserva r " +
-	           "WHERE r.reservaId.aulaYCarritos.aulaYCarritos = :recurso " +
-	           "ORDER BY r.reservaId.diasDeLaSemana, r.reservaId.tramosHorarios")
-    List<ReservaDto> findReservasByRecurso(@Param("recurso") String recurso);
+		   "r.reservaId.diasDeLaSemana.diasDeLaSemana, r.reservaId.tramosHorarios.tramosHorarios) " +
+		   "FROM Reserva r " +
+		   "WHERE r.reservaId.aulaYCarritos = :recurso")
+	List<ReservaDto> encontrarReservaPorRecurso(@Param("recurso") Recursos recurso);
+
 }

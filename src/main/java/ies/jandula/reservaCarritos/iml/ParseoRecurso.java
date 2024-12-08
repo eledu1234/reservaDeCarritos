@@ -34,7 +34,6 @@ public class ParseoRecurso implements IParseoRecurso
 			Recursos recursos = new Recursos();
 			
 			recursos.setAulaYCarritos(lineaDelFicheroTroceada[0]);
-			recursos.setTipoRecurso(lineaDelFicheroTroceada[1]);
 			
 			this.recursosRepository.saveAndFlush(recursos);
 		}

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import ies.jandula.reservaCarritos.exception.ReservaException;
 import ies.jandula.reservaCarritos.interfaces.IGestroParseo;
+import ies.jandula.reservaCarritos.interfaces.IParseoDiasSemana;
 import ies.jandula.reservaCarritos.interfaces.IParseoRecurso;
 import ies.jandula.reservaCarritos.interfaces.IParseoTramoHorario;
 import ies.jandula.reservaCarritos.utils.Costantes;
@@ -24,13 +25,17 @@ public class GestorParseo implements IGestroParseo
 	
 	@Autowired
 	private IParseoTramoHorario parseoTramoHorario;
+	
+	@Autowired
+	private IParseoDiasSemana parseoDiasSemana;
 
 	@Override
 	public void parseaFichero(String nombreFichero) throws ReservaException 
 	{
 		// TODO Auto-generated method stub
 		
-		switch(nombreFichero) {
+		switch(nombreFichero) 
+		{
 			case Costantes.FICHERO_RECURSO:
 				Scanner scannerRecurso = this.abrirFichero(nombreFichero);
 				
@@ -46,6 +51,13 @@ public class GestorParseo implements IGestroParseo
 				
 				scannerTramosHorarios.close();
 				break;
+			case Costantes.FICHERO_DIAS_SEMANAS:
+				Scanner scannerDiasSemana = this.abrirFichero(nombreFichero);
+				
+				this.parseoDiasSemana.parseaFichero(scannerDiasSemana);
+				
+				scannerDiasSemana.close();
+				break;
 				
 			default:
 				throw new ReservaException(1, "Fichero" + nombreFichero + "no encontrado");
@@ -53,7 +65,8 @@ public class GestorParseo implements IGestroParseo
 		
 	}
 	
-	private Scanner abrirFichero(String nombreFichero) throws ReservaException{
+	private Scanner abrirFichero(String nombreFichero) throws ReservaException
+	{
 		try
 		{
 			// Get file from resource
